@@ -217,7 +217,7 @@ describe("Given that I am a user on login page", () => {
          });
 
          const handleSubmit = jest.fn(login.handleSubmitAdmin);
-         login.login = jest.fn().mockResolvedValue({}); // <= A voir
+         login.login = jest.fn().mockResolvedValue({});
          form.addEventListener("submit", handleSubmit);
          fireEvent.submit(form);
          expect(handleSubmit).toHaveBeenCalled();
@@ -238,16 +238,3 @@ describe("Given that I am a user on login page", () => {
       });
    });
 });
-
-/////////////// Mon bloc de tests /////////////////
-
-test("Vérifie la valeur de l'input", () => {
-   const resultInput = screen.getByTestId("employee-email-input");
-   expect(resultInput.value).toBe("cedric.hiely@billed.com");
-});
-
-// test("Vérifie la valeur de l'input", () => {
-//    expect(inputPasswordUser.value).toBe("azerty");
-// });
-
-//////////////////////////////////////////////////
