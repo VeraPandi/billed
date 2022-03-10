@@ -4,21 +4,17 @@
 
 import { screen, waitFor, fireEvent } from "@testing-library/dom";
 import "@testing-library/jest-dom/extend-expect";
-import userEvent from "@testing-library/user-event";
 import BillsUI from "../views/BillsUI.js";
 import { bills } from "../fixtures/bills.js";
 import { ROUTES_PATH, ROUTES } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import Bills from "../containers/Bills.js";
-import { formatDate } from "../app/format.js";
-import store from "../__mocks__/store";
 import { mockedBills } from "../__mocks__/store";
-
 import router from "../app/Router.js";
 
 describe("Given I am connected as an employee", () => {
    describe("When I am on Bills Page", () => {
-      // #07
+      // #05
       test("Then bill icon in vertical layout should be highlighted", async () => {
          Object.defineProperty(window, "localStorage", {
             value: localStorageMock,
@@ -38,7 +34,7 @@ describe("Given I am connected as an employee", () => {
          expect(screen.getByTestId("icon-window")).toBeTruthy();
       });
 
-      // #08
+      // #06
       test("Then bills should be ordered from earliest to latest", () => {
          document.body.innerHTML = BillsUI({ data: bills });
          const dates = screen
@@ -51,25 +47,25 @@ describe("Given I am connected as an employee", () => {
          expect(dates).toEqual(datesSorted);
       });
 
-      // #09
+      // #07
       test("Then, logout icon in vertical layout should be displayed", () => {
          const logoutBtn = document.getElementById("layout-disconnect");
          expect(logoutBtn).toBeTruthy();
       });
 
-      // #10
+      // #08
       test("Then, I should see the button to create a bill", () => {
          const newBillBtn = screen.getByTestId("btn-new-bill");
          expect(newBillBtn).toBeDefined();
       });
 
-      // #11
+      // #09
       test("Then, sent bills should be displayed on the page", () => {
          const billTableLength = screen.getByTestId("tbody").childElementCount;
          expect(billTableLength).toEqual(bills.length);
       });
 
-      // #16
+      // #10
       test("Then, all fields should display bill data", () => {
          document.body.innerHTML = BillsUI({ data: bills });
          const amount = screen.getAllByTestId("amount")[0].innerHTML;
@@ -83,7 +79,7 @@ describe("Given I am connected as an employee", () => {
    });
 
    describe("when I click on an eye icon button", () => {
-      // #14
+      // #11
       test("Then, a modal containing a downloaded file should open", () => {
          document.body.innerHTML = BillsUI({ data: bills });
 
@@ -100,7 +96,6 @@ describe("Given I am connected as an employee", () => {
          });
 
          const eyeIcon = screen.getAllByTestId("icon-eye")[0];
-         const url = eyeIcon.getAttribute("data-bill-url");
 
          const handleClickIconEye = jest.fn(() => {
             bill.handleClickIconEye(eyeIcon);
@@ -115,7 +110,7 @@ describe("Given I am connected as an employee", () => {
    });
 
    describe("when I click on the 'nouvelle note de frais' button", () => {
-      // #15
+      // #12
       test("Then, It should renders a new bill page", () => {
          document.body.innerHTML = BillsUI({ data: bills });
 
@@ -144,7 +139,7 @@ describe("Given I am connected as an employee", () => {
    });
 
    describe("When I am on bills page but it is loading", () => {
-      // #12
+      // #13
       test("Then, loading page should be rendered", () => {
          document.body.innerHTML = BillsUI({ loading: true });
          expect(screen.getAllByText("Loading...")).toBeTruthy();
@@ -152,7 +147,7 @@ describe("Given I am connected as an employee", () => {
    });
 
    describe("When I am on bills page but back-end send an error message", () => {
-      // #13
+      // #14
       test("Then, error page should be rendered", () => {
          document.body.innerHTML = BillsUI({ error: "some error message" });
          expect(screen.getAllByText("Erreur")).toBeTruthy();
@@ -160,10 +155,10 @@ describe("Given I am connected as an employee", () => {
    });
 });
 
-// test d'intégration GET
+// GET integration test
 describe("Given I am a user connected as Employee", () => {
    describe("When I navigate to Bills page", () => {
-      // #TI01
+      // #15
       test("I should fetch bills from mock API GET", async () => {
          const getmockedBills = jest.spyOn(mockedBills, "list");
          const bills = await mockedBills.list();
@@ -171,7 +166,7 @@ describe("Given I am a user connected as Employee", () => {
          expect(bills.length).toBe(4);
       });
 
-      // #TI02
+      // #16
       test("fetches bills from an API and fails with 404 message error", async () => {
          mockedBills.list.mockImplementationOnce(() => {
             return Promise.reject(new Error("Erreur 404"));
@@ -185,7 +180,7 @@ describe("Given I am a user connected as Employee", () => {
          expect(message).toBeTruthy();
       });
 
-      // #TI03
+      // #17
       test("fetches bills from an API and fails with 500 message error", async () => {
          mockedBills.list.mockImplementationOnce(() => {
             return Promise.reject(new Error("Erreur 500"));
