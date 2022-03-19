@@ -9,6 +9,7 @@ import { localStorageMock } from "../__mocks__/localStorage.js";
 import DashboardUI from "../views/DashboardUI.js";
 import userEvent from "@testing-library/user-event";
 import { ROUTES } from "../constants/routes";
+import BillsUI from "../views/BillsUI.js";
 
 const bills = [
    {
@@ -29,7 +30,7 @@ const bills = [
    },
 ];
 
-describe("Given I am connected", () => {
+describe("Given I am connected as admin", () => {
    describe("When I click on disconnect button", () => {
       test("Then, I should be sent to login page", () => {
          const onNavigate = (pathname) => {
@@ -53,6 +54,40 @@ describe("Given I am connected", () => {
          userEvent.click(disco);
          expect(handleClick).toHaveBeenCalled();
          expect(screen.getByText("Administration")).toBeTruthy();
+      });
+   });
+});
+
+describe("Given I am connected as employee", () => {
+   describe("When I click on disconnect button", () => {
+      // #27
+      test("Then, I should be sent to login page", () => {
+         const onNavigate = (pathname) => {
+            document.body.innerHTML = ROUTES({ pathname });
+         };
+         Object.defineProperty(window, "localStorage", {
+            value: localStorageMock,
+         });
+         window.localStorage.setItem(
+            "user",
+            JSON.stringify({
+               type: "Employee",
+            })
+         );
+         document.body.innerHTML = BillsUI({ data: bills });
+         const logout = new Logout({ document, onNavigate, localStorage });
+         const handleClick = jest.fn(logout.handleClick);
+
+         const logoutBtn = document.querySelector("#layout-disconnect");
+         logoutBtn.addEventListener("click", handleClick);
+         userEvent.click(logoutBtn);
+
+         // The function which manages the reset of the URL of the page
+         // and the return to the Login page is called
+         expect(handleClick).toHaveBeenCalled();
+
+         // The "employee" login form is visible on the page and returns the value "true"
+         expect(screen.getByText("Employé")).toBeTruthy();
       });
    });
 });

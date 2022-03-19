@@ -13,9 +13,11 @@ describe("Given that I am a user on login page", () => {
       test("Then It should renders Login page", () => {
          document.body.innerHTML = LoginUI();
 
+         // The input field must be empty
          const inputEmailUser = screen.getByTestId("employee-email-input");
          expect(inputEmailUser.value).toBe("");
 
+         // The input field must be empty
          const inputPasswordUser = screen.getByTestId(
             "employee-password-input"
          );
@@ -23,9 +25,10 @@ describe("Given that I am a user on login page", () => {
 
          const form = screen.getByTestId("form-employee");
          const handleSubmit = jest.fn((e) => e.preventDefault());
-
          form.addEventListener("submit", handleSubmit);
          fireEvent.submit(form);
+
+         // The form must be present on the page and its value return "true"
          expect(screen.getByTestId("form-employee")).toBeTruthy();
       });
    });
@@ -35,10 +38,12 @@ describe("Given that I am a user on login page", () => {
       test("Then It should renders Login page", () => {
          document.body.innerHTML = LoginUI();
 
+         // We enter an incorrect format
          const inputEmailUser = screen.getByTestId("employee-email-input");
          fireEvent.change(inputEmailUser, { target: { value: "pasunemail" } });
          expect(inputEmailUser.value).toBe("pasunemail");
 
+         // We enter an incorrect format
          const inputPasswordUser = screen.getByTestId(
             "employee-password-input"
          );
@@ -47,9 +52,10 @@ describe("Given that I am a user on login page", () => {
 
          const form = screen.getByTestId("form-employee");
          const handleSubmit = jest.fn((e) => e.preventDefault());
-
          form.addEventListener("submit", handleSubmit);
          fireEvent.submit(form);
+
+         // The form must be present on the page and its value return "true"
          expect(screen.getByTestId("form-employee")).toBeTruthy();
       });
    });
@@ -67,6 +73,8 @@ describe("Given that I am a user on login page", () => {
          fireEvent.change(inputEmailUser, {
             target: { value: inputData.email },
          });
+
+         // The value of the "email" field must return the value "johndoe@email.com"
          expect(inputEmailUser.value).toBe(inputData.email);
 
          const inputPasswordUser = screen.getByTestId(
@@ -75,6 +83,8 @@ describe("Given that I am a user on login page", () => {
          fireEvent.change(inputPasswordUser, {
             target: { value: inputData.password },
          });
+
+         // The value of the "password" field must return the value "azerty"
          expect(inputPasswordUser.value).toBe(inputData.password);
 
          const form = screen.getByTestId("form-employee");
@@ -109,7 +119,11 @@ describe("Given that I am a user on login page", () => {
          login.login = jest.fn().mockResolvedValue({});
          form.addEventListener("submit", handleSubmit);
          fireEvent.submit(form);
+
+         // By clicking on the connection button, the function that manages the connection must be called
          expect(handleSubmit).toHaveBeenCalled();
+
+         // The method that changes the url must be called with the arguments below
          expect(window.localStorage.setItem).toHaveBeenCalled();
          expect(window.localStorage.setItem).toHaveBeenCalledWith(
             "user",
@@ -124,6 +138,7 @@ describe("Given that I am a user on login page", () => {
 
       // #04
       test("It should renders Bills page", () => {
+         // The rendered page should display the title "Mes notes de frais"
          expect(screen.queryByText("Mes notes de frais")).toBeDefined();
       });
    });
