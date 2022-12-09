@@ -1,6 +1,6 @@
-## PROJET 9
+## Projet :
 
-Mission : Débugger et tester un SaaS RH
+Débugger et tester un SaaS RH
 
 ## Contexte :
 
